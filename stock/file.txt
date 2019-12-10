@@ -1,0 +1,38 @@
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.lang.*;
+
+public class App{
+    public static void main(String[] args)throws IOException {
+        URL url = new URL("https://finance.yahoo.com/quote/KO?p=KO&.tsrc=fin-srch");
+        
+        URLConnection urlconn = url.openConnection();
+
+        InputStreamReader stream = new InputStreamReader(urlconn.getInputStream());
+        BufferedReader buff = new BufferedReader(stream);
+        String test = "<span class=\"Trsdu(0.3s) Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(b)\" data-reactid=\"14\">";
+        int index = 0;
+        String line = buff.readLine();
+        String result = "", res = "";
+        while(line != null){
+            if(line.contains(test)){
+                index = line.indexOf(test) + test.length();
+                result = line.substring(index, index + 10);
+               
+                for (int i=0;i<=result.length();i++) {
+                    if (result.charAt(i) != '<'){
+                        res = res + result.charAt(i);
+                    }    
+                    else
+                        break;
+                }
+            }
+            line = buff.readLine();
+        }
+
+        System.out.println(res);
+    }
+}
